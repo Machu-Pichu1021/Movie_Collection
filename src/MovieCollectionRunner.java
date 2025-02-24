@@ -1,4 +1,5 @@
-package PACKAGE_NAME;
-
 public class MovieCollectionRunner {
+    public static void main(String[] args) {
+        MovieCollection collection = new MovieCollection();
+    }
 }
