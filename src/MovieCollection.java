@@ -47,7 +47,6 @@ public class MovieCollection {
             if (movie.getTitle().toLowerCase().contains(keyword.toLowerCase()))
                 foundMovies.add(movie);
         }
-        alphabetizeByTitle(foundMovies);
 
         if (foundMovies.isEmpty()) {
             System.out.println("No movies were found with that search term!");
@@ -55,6 +54,7 @@ public class MovieCollection {
             return;
         }
 
+        alphabetizeMovies(foundMovies);
         for (int i = 0; i < foundMovies.size(); i++)
             System.out.println((i + 1) + ": " + foundMovies.get(i).getTitle());
 
@@ -79,7 +79,80 @@ public class MovieCollection {
 
 
     private void searchCast() {
+        System.out.println("You chose to search for an actor.");
+        System.out.print("Please enter a search term: ");
+        String keyword = inputScanner.nextLine();
+        System.out.println("Here are all the actors containing '" + keyword + "' in their name:");
 
+        ArrayList<String> names = new ArrayList<>();
+        ArrayList<Movie> foundMovies = new ArrayList<>();
+        for (Movie movie : movies) {
+            String[] cast = movie.getCast().split("\\|");
+            for (String actor : cast) {
+                if (!names.contains(actor) && actor.toLowerCase().contains(keyword.toLowerCase())) {
+                    names.add(actor);
+                    foundMovies.add(movie);
+                }
+            }
+        }
+
+        if (names.isEmpty()) {
+            System.out.println("No actors were found with that search term!");
+            System.out.println("Check your spelling or try again with a different search term.");
+            return;
+        }
+
+        alphabetizeNames(names);
+        for (int i = 0; i < names.size(); i++)
+            System.out.println((i + 1) + ": " + names.get(i));
+
+        System.out.println("Which actor would you like to view the information of?");
+        System.out.print("Enter the number next to their name as appeared in the list above: ");
+        if (inputScanner.hasNextInt()) {
+            int choice = inputScanner.nextInt();
+            inputScanner.nextLine(); //Read the new line character
+            if (0 >= choice || choice >= names.size() + 1) {
+                System.out.println("Choice is out of bounds; returning to main menu...");
+                return;
+            }
+            String actorChosen = names.get(choice - 1);
+            System.out.println("Here are all the movies that " + actorChosen + " has acted in: ");
+
+            ArrayList<Movie> actorMovies = new ArrayList<>();
+            for (Movie movie : foundMovies) {
+                String[] cast = movie.getCast().split("\\|");
+                for (String actor : cast) {
+                    if (actor.equalsIgnoreCase(actorChosen)) {
+                        actorMovies.add(movie);
+                    }
+                }
+            }
+
+            for (int i = 0; i < actorMovies.size(); i++)
+                System.out.println((i + 1) + ": " + actorMovies.get(i).getTitle());
+
+            System.out.println("Which movie would you like to view the information of?");
+            System.out.print("Enter the number next to the title as appeared in the list above: ");
+            if (inputScanner.hasNextInt()) {
+                int choice2 = inputScanner.nextInt();
+                inputScanner.nextLine(); //Read the new line character
+                if (0 >= choice2 || choice2 >= foundMovies.size() + 1) {
+                    System.out.println("Choice is out of bounds; returning to main menu...");
+                    return;
+                }
+                System.out.println(foundMovies.get(choice2 - 1));
+                System.out.println("Press enter to return to the main menu.");
+                inputScanner.nextLine();
+            }
+            else {
+                System.out.println("Invalid choice; returning to main menu...");
+                inputScanner.nextLine();
+            }
+        }
+        else {
+            System.out.println("Invalid choice; returning to main menu...");
+            inputScanner.nextLine();
+        }
     }
 
     private void importMovies() {
@@ -103,7 +176,19 @@ public class MovieCollection {
         }
     }
 
-    private void alphabetizeByTitle(ArrayList<Movie> movies) {
+    private void alphabetizeNames(ArrayList<String> names) {
+        for (int i = 1; i < names.size(); i++) {
+            String name = names.get(i);
+            int j = i - 1;
+            while (j >= 0 && name.compareTo(names.get(j)) < 0) {
+                names.set(j + 1, names.get(j));
+                names.set(j, name);
+                j--;
+            }
+        }
+    }
+
+    private void alphabetizeMovies(ArrayList<Movie> movies) {
         for (int i = 1; i < movies.size(); i++) {
             Movie movie = movies.get(i);
             int j = i - 1;
