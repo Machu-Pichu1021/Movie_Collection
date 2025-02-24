@@ -7,11 +7,42 @@ public class MovieCollection {
     private ArrayList<Movie> movies;
     private final String fileDirectory = "src\\movies_data.csv";
 
+    private final Scanner inputScanner = new Scanner(System.in);
+
     public MovieCollection() {
         movies = new ArrayList<>();
         importMovies();
-        for (Movie movie : movies)
-            System.out.println(movie);
+        run();
+    }
+
+    private void run() {
+        System.out.println("Welcome to the movie database 7956!");
+        String menuOption = "";
+
+        while (!menuOption.equals("q")) {
+            System.out.println("------------ Main Menu ----------");
+            System.out.println("- search by (t)itle");
+            System.out.println("- search for (c)ast member");
+            System.out.println("- (q)uit");
+            System.out.print("Enter choice: ");
+            menuOption = inputScanner.nextLine();
+
+            switch (menuOption) {
+                case "t" -> searchTitles();
+                case "c" -> searchCast();
+                case "q" -> System.out.println("Goodbye!");
+                default -> System.out.println("Invalid choice! Please try again.");
+            }
+        }
+    }
+
+    private void searchTitles() {
+
+    }
+
+
+    private void searchCast() {
+
     }
 
     private void importMovies() {
