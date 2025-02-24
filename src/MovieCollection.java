@@ -37,7 +37,44 @@ public class MovieCollection {
     }
 
     private void searchTitles() {
+        System.out.println("You chose to search by title.");
+        System.out.print("Please enter a search term: ");
+        String keyword = inputScanner.nextLine();
+        System.out.println("Here are all the movies containing '" + keyword + "' in their title:");
 
+        ArrayList<Movie> foundMovies = new ArrayList<>();
+        for (Movie movie : movies) {
+            if (movie.getTitle().toLowerCase().contains(keyword.toLowerCase()))
+                foundMovies.add(movie);
+        }
+        alphabetizeByTitle(foundMovies);
+
+        if (foundMovies.isEmpty()) {
+            System.out.println("No movies were found with that search term!");
+            System.out.println("Check your spelling or try again with a different search term.");
+            return;
+        }
+
+        for (int i = 0; i < foundMovies.size(); i++)
+            System.out.println((i + 1) + ": " + foundMovies.get(i).getTitle());
+
+        System.out.println("Which movie would you like to view the information of?");
+        System.out.print("Enter the number next to the title as appeared in the list above: ");
+        if (inputScanner.hasNextInt()) {
+            int choice = inputScanner.nextInt();
+            inputScanner.nextLine(); //Read the new line character
+            if (0 >= choice || choice >= foundMovies.size() + 1) {
+                System.out.println("Choice is out of bounds; returning to main menu...");
+                return;
+            }
+            System.out.println(foundMovies.get(choice - 1));
+            System.out.println("Press enter to return to the main menu.");
+            inputScanner.nextLine();
+        }
+        else {
+            System.out.println("Invalid choice; returning to main menu...");
+            inputScanner.nextLine();
+        }
     }
 
 
@@ -66,4 +103,15 @@ public class MovieCollection {
         }
     }
 
+    private void alphabetizeByTitle(ArrayList<Movie> movies) {
+        for (int i = 1; i < movies.size(); i++) {
+            Movie movie = movies.get(i);
+            int j = i - 1;
+            while (j >= 0 && movie.getTitle().compareTo(movies.get(j).getTitle()) < 0) {
+                movies.set(j + 1, movies.get(j));
+                movies.set(j, movie);
+                j--;
+            }
+        }
+    }
 }
