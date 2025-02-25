@@ -92,13 +92,11 @@ public class MovieCollection {
         System.out.println("Here are all the actors containing '" + keyword + "' in their name:");
 
         ArrayList<String> names = new ArrayList<>();
-        ArrayList<Movie> foundMovies = new ArrayList<>();
         for (Movie movie : movies) {
             String[] cast = movie.getCast().split("\\|");
             for (String actor : cast) {
                 if (!names.contains(actor) && actor.toLowerCase().contains(keyword.toLowerCase())) {
                     names.add(actor);
-                    foundMovies.add(movie);
                 }
             }
         }
@@ -130,7 +128,7 @@ public class MovieCollection {
             System.out.println("Here are all the movies that " + actorChosen + " has acted in: ");
 
             ArrayList<Movie> actorMovies = new ArrayList<>();
-            for (Movie movie : foundMovies) {
+            for (Movie movie : movies) {
                 String[] cast = movie.getCast().split("\\|");
                 for (String actor : cast) {
                     if (actor.equalsIgnoreCase(actorChosen)) {
@@ -139,6 +137,7 @@ public class MovieCollection {
                 }
             }
 
+            alphabetizeMovies(actorMovies);
             for (int i = 0; i < actorMovies.size(); i++)
                 System.out.println((i + 1) + ": " + actorMovies.get(i).getTitle());
 
