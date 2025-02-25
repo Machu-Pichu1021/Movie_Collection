@@ -9,6 +9,9 @@ public class MovieCollection {
 
     private final Scanner inputScanner = new Scanner(System.in);
 
+    private final String bold = "\u001B[1m";
+    private final String unbold = "\u001B[0m";
+
     public MovieCollection() {
         movies = new ArrayList<>();
         importMovies();
@@ -55,8 +58,12 @@ public class MovieCollection {
         }
 
         alphabetizeMovies(foundMovies);
-        for (int i = 0; i < foundMovies.size(); i++)
-            System.out.println((i + 1) + ": " + foundMovies.get(i).getTitle());
+        for (int i = 0; i < foundMovies.size(); i++) {
+            String title = foundMovies.get(i).getTitle();
+            int keyIndex = title.toLowerCase().indexOf(keyword.toLowerCase());
+            String print = (i + 1) + ": " + title.substring(0, keyIndex) + bold + title.substring(keyIndex, keyIndex + keyword.length()) + unbold + title.substring(keyIndex + keyword.length());
+            System.out.println(print);
+        }
 
         System.out.println("Which movie would you like to view the information of?");
         System.out.print("Enter the number next to the title as appeared in the list above: ");
@@ -103,8 +110,12 @@ public class MovieCollection {
         }
 
         alphabetizeNames(names);
-        for (int i = 0; i < names.size(); i++)
-            System.out.println((i + 1) + ": " + names.get(i));
+        for (int i = 0; i < names.size(); i++) {
+            String name = names.get(i);
+            int keyIndex = name.toLowerCase().indexOf(keyword.toLowerCase());
+            String print = (i + 1) + ": " + name.substring(0, keyIndex) + bold + name.substring(keyIndex, keyIndex + keyword.length()) + unbold + name.substring(keyIndex + keyword.length());
+            System.out.println(print);
+        }
 
         System.out.println("Which actor would you like to view the information of?");
         System.out.print("Enter the number next to their name as appeared in the list above: ");
@@ -136,11 +147,11 @@ public class MovieCollection {
             if (inputScanner.hasNextInt()) {
                 int choice2 = inputScanner.nextInt();
                 inputScanner.nextLine(); //Read the new line character
-                if (0 >= choice2 || choice2 >= foundMovies.size() + 1) {
+                if (0 >= choice2 || choice2 >= actorMovies.size() + 1) {
                     System.out.println("Choice is out of bounds; returning to main menu...");
                     return;
                 }
-                System.out.println(foundMovies.get(choice2 - 1));
+                System.out.println(actorMovies.get(choice2 - 1));
                 System.out.println("Press enter to return to the main menu.");
                 inputScanner.nextLine();
             }
